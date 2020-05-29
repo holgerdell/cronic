@@ -11,6 +11,12 @@ OUT=$TMP/cronic.out
 ERR=$TMP/cronic.err
 TRACE=$TMP/cronic.trace
 
+STDERR_IS_ERROR=1
+if [ "$1" == "--no-error-stderr" ]; then
+    STDERR_IS_ERROR=0
+    shift
+fi
+
 set +e
 "$@" >"$OUT" 2>"$TRACE"
 RESULT=$?
@@ -24,7 +30,7 @@ else
     ERR=$TRACE
 fi
 
-if [ $RESULT -ne 0 ] || [ -s "$ERR" ]
+if [ $RESULT -ne 0 ] || { [ $STDERR_IS_ERROR -eq 1 ] && [ -s "$ERR" ]; }
     then
     echo "Cronic detected failure or error output for the command:"
     echo "$@"
