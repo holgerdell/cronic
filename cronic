@@ -19,7 +19,7 @@ set -e
 PATTERN="^${PS4:0:1}\\+${PS4:1}"
 if grep -aq "$PATTERN" "$TRACE"
 then
-    ! grep -av "$PATTERN" "$TRACE" > "$ERR"
+    ! grep -av "$PATTERN" "$TRACE" > "$ERR" && exit 1
 else
     ERR=$TRACE
 fi
